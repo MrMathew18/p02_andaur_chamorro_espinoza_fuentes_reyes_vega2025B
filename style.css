@@ -87,7 +87,7 @@ margin-right:780px
   z-index: 2;  
   color: white;  
   text-align: right;  
-  padding: 200px 50px;
+  padding: 180px 50px;
   margin-left: 760px;  
   font-family: 'Jura', sans-serif;
 }
@@ -110,7 +110,7 @@ margin-right:780px
 
 .overlay-text{
   position: absolute;
-  margin-bottom: 20%;
+  margin-bottom: 18%;
   width: 55%;
   z-index: 2;  
   color: #ffff;
