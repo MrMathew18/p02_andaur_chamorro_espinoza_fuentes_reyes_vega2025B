@@ -7,8 +7,8 @@ body{
   top: 0;
   width: 100%;
   background-color: #111;
-  padding: 20px 40px;
-  z-index: 1100;
+  padding: 20px 0px;
+  z-index: 1500;
 }
 
 .nav-list {
@@ -17,6 +17,7 @@ body{
   justify-content: flex-end; /* Alinea a la derecha */
   margin: 0;
   padding: 0;
+  margin-right: 30px;
 }
 
 .nav-list li {
@@ -87,7 +88,7 @@ margin-right:780px
   color: white;  
   text-align: right;  
   padding: 200px 50px;
-  margin-left: 700px;  
+  margin-left: 760px;  
   font-family: 'Jura', sans-serif;
 }
 
@@ -136,6 +137,30 @@ div.columna {
   display: grid !important;
   grid-template-columns:1fr 1fr 1fr ;
   grid-template-rows: 1fr;
+}
+
+.hero-img-wrap2 {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 70%;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.hero-img2 {
+  position: absolute;
+  width: 90%;  
+  height: 60%;  
+  object-fit: cover;  
+  z-index: 1;
+}
+
+.overlay-text2 {
+  position: absolute;
+  width: 45%;
+  z-index: 2;
+  color: #ffff;
 }
 
 }
