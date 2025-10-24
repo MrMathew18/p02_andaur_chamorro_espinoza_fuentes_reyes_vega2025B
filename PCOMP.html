@@ -17,10 +17,30 @@
       color: #ffffff;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
     }
+            .rectangle {
+            position: absolute;
+            opacity: 1;
+            transition: width 3s ease-in-out;
+        }
+ 
   </style>
 </head>
 <body>
+
+<!-- contenedor para que los rectangulos esten en el background -->
+<div id="background-container"></div>
+
+<!-- contenedor para el texto de la portada -->
+<div id="content-container">
+    <div class="content-box">
+        <h1> <h1 style="font-family: 'Julius Sans One'; font-size:100px; margin-left:450px; margin-top:240px; font-weight: 400;">LUX</h1>
+<h1 style="font-family: 'Julius Sans One'; font-size:100px; margin-left:450px; margin-top:-95px; font-weight: 400;">UNICOLOR</h1>
+</h1>
+        <p style= "margin: 40px; text-align: center; font-weight: 300 "> Yakolen Andaur - Luz Chamorro - Belen Espinoza - Emilia Fuentes - Matías Reyes - Agustín Vega.</p>
+    </div>
+</div>
 
 <!-- NAVBAR -->
 <header>  
@@ -39,19 +59,200 @@
 
 <!--La portada -->
 <section id="UNICOLOR">
-    <div style="background: black; padding: 10px; margin: 40px;"></div>
-    <div style="background: #F41590; padding: 30px; margin-left:280px; margin-right:780px"></div>
-    <div style="background: #F47215; padding: 30px; margin-left:280px; margin-right:780px"></div>
-
-    <h1 style="font-family: 'Julius Sans One'; font-size:100px; margin-left:450px; margin-top:40px; font-weight: 400;">LUX</h1>
-    <h1 style="font-family: 'Julius Sans One'; font-size:100px; margin-left:450px; margin-top:-95px; font-weight: 400;">UNICOLOR</h1>
-
-    <div style="background: #FFFF; padding: 50px; margin-left:550px; margin-right:500px; margin-top: -30px;"></div>
-    <div style="background: #2B3EBB; padding: 33px; margin-left:270px; margin-right:600px"></div>
-     <p style= "margin: 40px; text-align: center; font-weight: 300 ">Yakolen Andaur - Luz Chamorro - Belen Espinoza - Emilia Fuentes - Matías Reyes - Agustín Vega</p>
-    <div style="background: #7386FF; padding: 20px"></div>
+    <div style="background: black; padding: 10px; margin: 40px;"></div> 
+    <div style="background: #7386FF; padding: 20px; margin-top: 290px;"></div>
     <div style="background: #415AFF; padding: 20px"></div>
     <br>
+<div id="container"></div>
+
+   <script>
+        const backgroundContainer = document.getElementById('background-container');
+        let rectangles = [];
+        
+        // colores de los rectangulos de la portada
+        const colors = [
+            '#F41590',
+            '#F47215',
+            '#2B3EBB',
+            '#A7C626',
+            '#5AFDA3',
+            '#BC69E3'
+            
+        ];
+        
+        let occupiedRanges = [];
+        let availableColors = [...colors]; 
+        
+        // asegurarse de que la posicion de un rectangulo nuevo no choca con la posicion de otros rectangulo
+        function wouldOverlap(top, height, buffer = 15) {
+            const bottom = top + height;
+            
+            for (const range of occupiedRanges) {
+                if (top < range.bottom + buffer && bottom > range.top - buffer) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        
+        function addOccupiedRange(top, height) {
+            occupiedRanges.push({
+                top: top,
+                bottom: top + height
+            });
+        }
+        
+        // elegir un color
+        function getUniqueColor() {
+            const randomIndex = Math.floor(Math.random() * availableColors.length);
+            const color = availableColors[randomIndex];
+            availableColors.splice(randomIndex, 1); // quita el color usado para no repetir colores
+            return color;
+        }
+        
+        // crear rectangulos
+        function createRectangles(count) {
+            const maxAttempts = 100;
+            let created = 0;
+            let attempts = 0;
+            
+            while (created < count && attempts < maxAttempts) {
+                attempts++;
+                
+                // variacion en el alto de los rectangulos
+                const height = 30 + Math.random() * 120;
+                const top = Math.random() * (window.innerHeight - height);
+                
+                if (!wouldOverlap(top, height)) {
+                    createRectangle(top, height);
+                    addOccupiedRange(top, height);
+                    created++;
+                }
+            }
+        }
+        
+        // crear cada rectangulos
+        function createRectangle(top, height) {
+            const rect = document.createElement('div');
+            rect.className = 'rectangle';
+            
+            // minimo y maximo de ancho de los rectangulos
+
+            const initialWidth = 5 + Math.random() * 10;
+            const maxWidth = (window.innerWidth * 0.7) + (Math.random() * window.innerWidth * 0.2);
+            
+            // elige color
+            const color = getUniqueColor();
+            
+            // punto de inicio aleatorio
+            const startFromLeft = Math.random() > 0.5;
+            
+            // estilo de los rectangulos
+            rect.style.height = `${height}px`;
+            rect.style.width = `${initialWidth}px`;
+            rect.style.backgroundColor = color;
+            rect.style.top = `${top}px`;
+            
+            if (startFromLeft) {
+                rect.style.left = '10px';
+                rect.style.right = 'auto';
+            } else {
+                rect.style.left = 'auto';
+                rect.style.right = '10px';
+            }
+            
+            
+            // añadir al contenedor del fondo
+            container.appendChild(rect);
+            
+            // inicio de la animacion en diferentes tiempos
+            const expandDuration = 3000 + Math.random() * 4000;
+            const contractDuration = 3000 + Math.random() * 4000;
+            const initialDelay = Math.random() * 5000;
+            
+            // guardar especificaciones de los rectangulos
+            const rectData = {
+                element: rect,
+                initialWidth: initialWidth,
+                maxWidth: maxWidth,
+                height: height,
+                top: top,
+                startFromLeft: startFromLeft,
+                expandDuration: expandDuration,
+                contractDuration: contractDuration,
+                expanding: true,
+                currentWidth: initialWidth
+            };
+            
+            rectangles.push(rectData);
+            
+            // empezar la animacion de los rectangulos con delay
+            setTimeout(() => {
+                animateRectangle(rectData);
+            }, initialDelay);
+        }
+        
+        // hacer animacion mas suave
+        function animateRectangle(rectData) {
+            const rect = rectData.element;
+            
+            function update() {
+                if (rectData.expanding) {
+
+                    rect.style.transition = `width ${rectData.expandDuration}ms ease-in-out`;
+                  
+                    rect.style.width = `${rectData.maxWidth}px`;
+                    
+                    rectData.expanding = false;
+                    
+                    // esperar a que la animacion termine para despues encoger
+                    setTimeout(() => {
+                      
+                        rect.style.transition = `width ${rectData.contractDuration}ms ease-in-out`;
+                        
+                        // encojer al ancho inicial
+                        rect.style.width = `${rectData.initialWidth}px`;
+                        
+                        // repetir el ciclo de expansion compresion
+                        setTimeout(() => {
+                            rectData.expanding = true;
+                            update();
+                        }, rectData.contractDuration + 100);
+                    }, rectData.expandDuration + 100);
+                } else {
+                    rectData.expanding = true;
+                    update();
+                }
+            }
+            
+            // empezar el loop
+            update();
+        }
+        
+        // adaptar los rectangulos al cambio de dimensiones de la ventana
+        window.addEventListener('resize', () => {
+            rectangles.forEach(rectData => {
+                rectData.maxWidth = (window.innerWidth * 0.7) + (Math.random() * window.innerWidth * 0.2);
+                
+                if (!rectData.expanding) {
+                    rectData.element.style.width = `${rectData.maxWidth}px`;
+                }
+            });
+        });
+        
+        // empezar la pagina con rectangulos
+        createRectangles(6);
+        
+        // Debug: esto me ayudò deepseek jeje
+        setTimeout(() => {
+            const leftCount = rectangles.filter(r => r.startFromLeft).length;
+            const rightCount = rectangles.filter(r => !r.startFromLeft).length;
+            console.log(`Summary: ${leftCount} rectangles from LEFT, ${rightCount} rectangles from RIGHT`);
+        }, 100);
+    </script>
+
+
 </section>
 
 <!-- Intro donde esta el video -->
@@ -86,6 +287,8 @@
 
 <!--La parte de los conceptos de la clase -->
 <section id="Automatiza">
+
+
    <div style="background: black; padding: 60px"></div>
     <div class="columna" style="display:grid; grid-template-columns:1fr 1fr 1fr">
         <div>
@@ -148,6 +351,30 @@
          </div>
       </div>
     </div>
+
+    <!-- Bibliografìa -->
+     <div style="background: black; padding: 60px"></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr">
+        <div>
+            <h2 style="margin-right:100px; margin-left:100px; margin-top: 300px;">Bibliografía</h2>
+            <p style="margin-right:100px; margin-left:100px;">
+               Carsten Nicolai unidisplay. (2016). Copenhague contemporáneo. https://copenhagencontemporary.org/en/carsten-nicolai/ <br>
+               <br>
+               Carsten Nicolai’s Unicolor throws you off-balance. (2025). Public Delivery. https://publicdelivery.org/carsten-nicolai-unicolor/<br>
+               <br>
+               Fact. (s/f). LUX: Carsten Nicolai – unicolor. Fact. https://www.factmag.com/2021/11/05/lux-carsten-nicolai-unicolor/ <br>
+               <br>
+               Isaza, M. (2016). Ver sonidos, oír imágenes: alva noto y la percepción del universo. Hispasonic. https://www.hispasonic.com/reportajes/ver-sonidos-oir-imagenes-alva-noto-percepcion-universo<br>/42271#:~:text=Lo%20especial%20de%20TouchDesigner%2C%20como,no%20son%20m%C3%A1s%20que%20frecuencias.&text=<br>Miguel%20es%20un%20investigador%20que,Sonic%20Field%20y%20Designing%20Sound<br>
+               <br>
+               Nicolai, C. (2014). unicolor. Carsten Nicolai. https://www.carstennicolai.de/?c=works&w=unicolor <br>
+               <br>
+               Unicolor. (s/f). LG OLED ART. https://lgoledart.com/artwork/unicolor <br>
+               <br>
+            </p>
+        </div>
+
+    </div>
+
 </section>
 
 </body>

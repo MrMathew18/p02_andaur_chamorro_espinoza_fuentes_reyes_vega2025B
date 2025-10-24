@@ -6,7 +6,7 @@ body{
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: #111;
+  background-color: #1b1b1b;
   padding: 20px 0px;
   z-index: 1500;
 }
@@ -57,15 +57,7 @@ margin-right:780px
   height: 50px;
  }
 
-/* Animación horizontaaaaal
-@keyframes move-horizontal {
-  0% {
-    transform: translatex(0);
-  }
-  10% {
-    transform: translateX(500px); /* Puedes ajustar el valor */
-  }
-}
+
 
 .video-section {
   position: relative;  
@@ -163,4 +155,14 @@ div.columna {
   color: #ffff;
 }
 
+}
+
+#background-container {
+    position: fixed;
+    z-index: 1;  
+}
+
+#content-container {
+    position: relative;
+    z-index: 2; 
 }
